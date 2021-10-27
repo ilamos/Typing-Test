@@ -101,6 +101,7 @@ class typing_test():
         self.appdata.typing_textvar.set(cur_text)
         if self.appdata.typing_index == 1:
             self.appdata.start_time = time.time()
+            print("Timer started")
 
     def on_backspace(self, event):
         print("Backspace pressed")
