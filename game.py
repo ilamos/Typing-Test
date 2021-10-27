@@ -2,7 +2,7 @@
 import tkinter as GUI
 from tkinter import messagebox
 from tkinter import messagebox
-from tkinter.constants import END, LEFT, WORD
+from tkinter.constants import END, LEFT, RIGHT
 from math import floor
 import time
 import random
@@ -55,7 +55,6 @@ word_library = [
     "include",
     "foreigner",
 ]
-
 class typing_test():
     class char():
         def __init__(self, char, right):
@@ -81,6 +80,7 @@ class typing_test():
             self.typing_chararr = []
             self.typing_index = 0
             self.typing_mistakes = 0
+            self.word_amount = words
             self.start_time = None
 
     def replace_char(self, cur_string, new_char, index):
@@ -97,7 +97,7 @@ class typing_test():
         self.writing_text.see("end")
         self.writing_text.configure(state="disabled")
         cur_text = self.appdata.typing_text
-        cur_text = self.replace_char(cur_text, cur_text[self.appdata.typing_index].capitalize(), self.appdata.typing_index)
+        cur_text = "> " + cur_text[self.appdata.typing_index:self.appdata.typing_index + 20]
         self.appdata.typing_textvar.set(cur_text)
         if self.appdata.typing_index == 1:
             self.appdata.start_time = time.time()
@@ -112,9 +112,10 @@ class typing_test():
         if self.appdata.typing_index == len(self.appdata.typing_text):
             seconds = time.time() - self.appdata.start_time
             wpm = floor(len(self.appdata.text_array) / (seconds / 60))
-            print("Test ended.")
+            print("-- TEST END --")
             print("Time taken: " + str(seconds))
             print("WPM: " + str(wpm))
+            print("Words: " + str(self.appdata.word_amount))
             messagebox.showinfo("Test ended", """Typing test ended.  \n
              Mistakes: """ + str(self.appdata.typing_mistakes) + """\n
              WPM: """ + str(wpm))
@@ -122,7 +123,7 @@ class typing_test():
 
     def on_type(self, *args):
         current_writing = self.appdata.typing_writevar.get()
-        current_textleft = self.appdata.typing_textvar.get()
+        current_textleft = self.appdata.typing_text
         print("Letter written: " + current_writing)
         self.writing_text.configure(state="normal")
         if current_textleft[self.appdata.typing_index].capitalize() == current_writing.capitalize():
@@ -138,7 +139,7 @@ class typing_test():
 
     def init_elements(self):
         print("Initializing window elements.")
-        self.typing_label = GUI.Label(textvariable=self.appdata.typing_textvar, wraplength=400, justify=LEFT).pack()
+        self.typing_label = GUI.Label(textvariable=self.appdata.typing_textvar).pack()
         self.writing_text = GUI.Text(height=1, width=20, wrap="none", padx=20, background="gray")
         self.writing_text.tag_configure("right", foreground="green", background="white")
         self.writing_text.tag_configure("wrong", foreground="red", background="black", underline=True)
