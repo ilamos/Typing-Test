@@ -76,7 +76,7 @@ class typing_test():
             self.typing_text = " ".join(self.text_array)
             self.typing_textvar = GUI.StringVar()
             self.typing_textvar.set(self.typing_text)
-            self.typing_writevar = GUI.StringVar()
+            #self.typing_writevar = GUI.StringVar()
             self.typing_chararr = []
             self.typing_index = 0
             self.typing_mistakes = 0
@@ -121,8 +121,8 @@ class typing_test():
              WPM: """ + str(wpm))
             self.app_window.destroy()
 
-    def on_type(self, *args):
-        current_writing = self.appdata.typing_writevar.get()
+    def on_type(self, key, *args):
+        current_writing = key
         current_textleft = self.appdata.typing_text
         print("Letter written: " + current_writing)
         self.writing_text.configure(state="normal")
@@ -131,11 +131,15 @@ class typing_test():
         else:
             self.appdata.typing_chararr.append(self.char(current_writing, False))
             self.appdata.typing_mistakes += 1
-        self.appdata.typing_writevar.set("")
+        #self.appdata.typing_writevar.set("")
         self.writing_text.configure(state="disabled")
         self.appdata.typing_index += 1
         self.update_text()
         self.check_text_end()
+
+    def on_key(self, event):
+        if event.char != "":
+            self.on_type(event.char)
 
     def init_elements(self):
         print("Initializing window elements.")
@@ -145,9 +149,10 @@ class typing_test():
         self.writing_text.tag_configure("wrong", foreground="red", background="black", underline=True)
         self.writing_text.configure(state="disabled")
         self.writing_text.pack()
-        self.text_entry = GUI.Entry(textvariable=self.appdata.typing_writevar, width=10).pack()
+        #self.text_entry = GUI.Entry(textvariable=self.appdata.typing_writevar, width=10).pack()
         self.app_window.bind("<BackSpace>", self.on_backspace)
-        self.appdata.typing_writevar.trace_add("write", callback=self.on_type)
+        self.app_window.bind("<KeyPress>", self.on_key)
+        #self.appdata.typing_writevar.trace_add("write", callback=self.on_type)
         
 
     def init_window(self):
