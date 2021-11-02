@@ -2,6 +2,7 @@
 import tkinter as GUI
 from tkinter import messagebox
 from tkinter import messagebox
+from tkinter import font
 from tkinter.constants import END, LEFT, RIGHT
 from math import floor
 import time
@@ -49,7 +50,7 @@ class typing_test():
         self.writing_text.see("end")
         self.writing_text.configure(state="disabled")
         cur_text = self.appdata.typing_text
-        cur_text = "> " + cur_text[self.appdata.typing_index:self.appdata.typing_index + 20]
+        cur_text = "> " + cur_text[self.appdata.typing_index:self.appdata.typing_index + 10]
         self.appdata.typing_textvar.set(cur_text)
         if self.appdata.typing_index == 1:
             self.appdata.start_time = time.time()
@@ -96,8 +97,8 @@ class typing_test():
 
     def init_elements(self):
         print("Initializing window elements.")
-        self.typing_label = GUI.Label(textvariable=self.appdata.typing_textvar).pack()
-        self.writing_text = GUI.Text(height=1, width=20, wrap="none", padx=20, background="gray")
+        self.typing_label = GUI.Label(textvariable=self.appdata.typing_textvar, font=("Arial", 20)).pack()
+        self.writing_text = GUI.Text(height=1, width=20, wrap="none", padx=20, background="gray", font=("Arial", 20))
         self.writing_text.tag_configure("right", foreground="green", background="white")
         self.writing_text.tag_configure("wrong", foreground="red", background="black", underline=True)
         self.writing_text.configure(state="disabled")
